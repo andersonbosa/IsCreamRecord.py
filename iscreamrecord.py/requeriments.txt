@@ -1,0 +1,10 @@
+## The following requirements were added by pip freeze:
+evdev==1.6.1
+mss==9.0.1
+numpy==1.25.1
+opencv-python==4.8.0.74
+Pillow==10.0.0
+pynput==1.7.6
+python-xlib==0.33
+screeninfo==0.8.1
+six==1.16.0
