@@ -229,3 +229,33 @@ class IsCreamRecorder:
             + str(len(self.get_items()))
             + ".png"
         )
+
+    # Coordinates start at the top left of the screen.
+    # The higher the ystart value, the lower the capture.
+    # The higher the xstart value, the farther right it begins.
+
+    def screenshot(self):
+        with mss.mss() as screenshooter:
+            last_time = time.time()
+
+            # The area of screen to be captured
+            monitor = {
+                "top": self.y_start,
+                # "left": self.x_start,
+                "left": self.primary_monitor.x,  # TOFIX: Using two monitors we need to use position x to capture primary monitor correctly.
+                "width": self.width,
+                "height": self.height,
+            }
+
+            # filename gets name of working directory, and creates name of files based on collection.
+            filename = self._get_collection_path()
+
+            fileOut = os.path.join(self.get_collection(), filename)
+
+            # Grab the data
+            sct_img = screenshooter.grab(monitor)
+
+            # Save to the picture file
+            mss.tools.to_png(sct_img.rgb, sct_img.size, output=fileOut)
+            self.logger.info(f"fps: {1 / (time.time() - last_time)}")
+
