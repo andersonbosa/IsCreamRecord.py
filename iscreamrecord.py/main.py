@@ -285,3 +285,118 @@ class IsCreamRecorder:
                 self.logger.info("Exiting")
                 break
 
+    # takes screenshots on time interval.
+    def sctAuto(self):
+        print(
+            f"{self.interval} - interval to screenshot | {self.quitKey} - press to quit"
+        )
+
+        if self.delay != 0:
+            self.logger.info(f"delay set for: {self.delay}")
+            time.sleep(self.delay)
+            self.logger.info("starting capture")
+
+        imgCount = 0
+        t = int(time.time())
+
+        while True:
+            whileTime = int(time.time())
+
+            # every interval take a screenshot
+            if whileTime - t > 0 and (whileTime - t) % self.interval == 0:
+                self.screenshot()
+                imgCount += 1
+                time.sleep(1)
+                self.logger.info(f"image Count: str(imgCount)")
+
+            if self.keyboard.isQuitKeyPressed:
+                self.logger.info(f"{self.quitKey} pressed, Exiting")
+                break
+
+        print(f"{imgCount}, Images gathered.")
+
+    # NOTE
+    def camManual(self):
+        print(f"{self.snapKey} - press to screenshot | {self.quitKey} - press to quit")
+
+        # Camera to be captured
+        vid = cv2.VideoCapture(self.camera)
+        count = 0
+        while True:
+            # filename gets name of working directory, and creates name of files based on collection.
+            filename = self._get_collection_path()
+            fileOut = os.path.join(self.get_collection(), filename)
+
+            ret, frame = vid.read()
+            cv2.imshow("IsCreamRecorder", frame)
+
+            # if key is pressed take screenshot.
+            if self.keyboard.isSnapKeyPressed:
+                self.logger.info("keyboard.isSnapKeyPressed")
+                cv2.imwrite(fileOut, frame)
+                count += 1
+                time.sleep(0.15)
+
+            cv2.waitKey(1)
+
+            # We implement keyboard rather than waitkey & 0xFF To remove lag as well as enable global macro
+            if self.keyboard.isQuitKeyPressed:
+                self.logger.info("keyboard.isQuitKeyPressed")
+                break
+
+        vid.release()
+        cv2.destroyAllWindows()
+
+        print(f"{str(count)}, Images gathered.")
+
+    def camAuto(self):
+        print(
+            f"{self.interval} - interval to screenshot | {self.quitKey} - press to quit"
+        )
+
+        if self.delay != 0:
+            self.logger.info(f"delay set for: {self.delay}")
+            time.sleep(self.delay)
+            self.logger.info("starting capture")
+
+        # Camera to be captured
+        vid = cv2.VideoCapture(self.camera)
+        count = 0
+        t = int(time.time())
+        while True:
+            whileTime = int(time.time())
+
+            # filename gets name of working directory, and creates name of files based on collection.
+            filename = self._get_collection_path()
+            fileOut = os.path.join(self.get_collection(), filename)
+
+            ret, frame = vid.read()
+            cv2.imshow("IsCreamRecorder", frame)
+
+            # every interval take a screenshot
+            if (whileTime - t) > 0 and (whileTime - t) % self.interval == 0:
+                cv2.imwrite(fileOut, frame)
+                count += 1
+                time.sleep(1)
+                print(f"image Count: {str(count)}")
+
+            cv2.waitKey(1)
+
+            # We implement keyboard rather than waitkey & 0xFF To remove lag as well as enable global macro
+            if self.keyboard.isQuitKeyPressed:
+                self.logger.info("keyboard.isQuitKeyPressed")
+                break
+
+        vid.release()
+        cv2.destroyAllWindows()
+
+        print(f"{str(count)}, Images gathered.")
+
+
+if __name__ == "__main__":
+    s = IsCreamRecorder()
+    s.screenshot()  # DONE
+    # s.sctManual() # DONE
+    # s.camManual() # DONE
+    # s.camAuto()   # DONE
+    pass
