@@ -43,7 +43,7 @@ This project is under the MIT license.
 ---
 
 <h4>  
-  <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/andersonbosa/iscreamrecord.py?style=social">
+  <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/andersonbosa/IsCreamRecord.py?style=social">
   | Did you like the repository? Give it a star! 😁
 </h4>
 
