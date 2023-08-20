@@ -115,3 +115,117 @@ class IsCreamRecorder:
         logger.addHandler(stream_handler)
 
         return logger
+
+    # Gets Width of primary monitor
+    def Width(self):
+        return self.primary_monitor.width
+
+    # Gets Height of primary monitor
+    def Height(self):
+        return self.primary_monitor.height
+
+    # Gets resolution of primary monitor
+    def Resolution(self):
+        return self.width, self.height
+
+    # Error handling
+    def seemsLegit(self):
+        if self.x_start != 0:
+            if self.Width() - (self.x_start + self.get_width()) < 0:
+                print("Screenshot out of bounds!")
+                exit()
+
+        if self.y_start != 0:
+            if self.Height() - (self.y_start + self.get_height()) < 0:
+                print("Screenshot out of bounds!")
+                exit()
+
+        if self.snapKey.lower() == self.quitKey.lower():
+            print("Capture Key and Quit key cannot be the same")
+            exit()
+
+    """ Getters """
+
+    def get_width(self):
+        return self.width
+
+    def get_height(self):
+        return self.height
+
+    def get_collection(self):
+        return self.collection
+
+    def get_items(self):
+        items = []
+        with os.scandir(self.get_collection()) as dir:
+            for entries in dir:
+                items.append(entries.name)
+        return items
+
+    def get_snap_key(self):
+        return self.snapKey
+
+    def get_quit_key(self):
+        return self.quitKey
+
+    def get_interval(self):
+        return self.interval
+
+    def get_camera(self):
+        return self.camera
+
+    def get_x_start(self):
+        return self.x_start
+
+    def get_y_start(self):
+        return self.y_start
+
+    def get_delay(self):
+        return self.delay
+
+    """ setters """
+
+    def set_collection(self, name):
+        collectionLoc = os.path.join(os.getcwd(), "collected-data", name)
+        if os.path.exists(collectionLoc):
+            self.collection = collectionLoc
+        else:
+            os.mkdir(collectionLoc)
+            self.collection = collectionLoc
+            print("Subfolder for collection", name, "created in collected-data")
+
+    def set_width(self, width):
+        self.width = width
+
+    def set_height(self, height):
+        self.height = height
+
+    def set_snap_key(self, snapKey):
+        self.snapKey = str(snapKey).lower()
+
+    def set_quit_key(self, quitKey):
+        self.quitKey = str(quitKey).lower()
+
+    def set_interval(self, interval):
+        self.interval = interval
+
+    def set_camera(self, camera):
+        self.camera = int(camera - 1)
+
+    def set_x_start(self, x_start):
+        self.x_start = x_start
+
+    def set_y_start(self, y_start):
+        self.y_start = y_start
+
+    def set_delay(self, delay):
+        self.delay = delay
+
+    """ Functions """
+
+    def _get_collection_path(self):
+        return (
+            self.get_collection().split(self.directory_divider)[-1]
+            + str(len(self.get_items()))
+            + ".png"
+        )
