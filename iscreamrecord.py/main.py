@@ -259,3 +259,29 @@ class IsCreamRecorder:
             mss.tools.to_png(sct_img.rgb, sct_img.size, output=fileOut)
             self.logger.info(f"fps: {1 / (time.time() - last_time)}")
 
+    # takes screenshots on keypress.
+    # snapkey is the key that triggers screenshot
+    def sctManual(self, benchmark=25):
+        print(f"{self.snapKey} - press to screenshot | {self.quitKey} - press to quit")
+
+        # 2 counts to adjust for the Borat
+        count = 0
+        imgCount = 0
+
+        while True:
+            # if key is pressed take screenshot.
+            if self.keyboard.isSnapKeyPressed:
+                self.screenshot()
+                count += 1
+                time.sleep(0.01)
+
+                # every 25 images let us know
+                if count % benchmark == 0:
+                    count += 1
+                    imgCount = count - 1
+                    self.logger.info(f"Images Taken: + {str(imgCount)}")
+
+            if self.keyboard.isQuitKeyPressed:
+                self.logger.info("Exiting")
+                break
+
